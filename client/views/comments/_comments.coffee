@@ -1,54 +1,32 @@
-UI.registerHelper "commentDate", (date) ->
+UI.registerHelper 'commentDate', (date) ->
   if date
     dateObj = new Date(date)
     return $.timeago(dateObj)
   "some time ago"
 
-Editor = {}
-
-Template.comments.created = ->
-  Session.set 'comments.new.value', ''
-  Session.set 'comments.new.previewing', false
-
 #
 #  Commenting Widget
 #
+
 Template.comments.rendered = ->
-  commentable = @data
-  _.each commentable.comments(), (comment) ->
-    comment.clearNotification()
+  if Meteor.user()
+    commentable = @data
+    _.each commentable.comments(), (comment) ->
+      comment.clearNotification()
 
-  setup = ->
-    Editor = ace.edit 'editor'
-    Editor.setTheme 'ace/theme/chrome'
-    Editor.getSession().setMode 'ace/mode/markdown'
-    Editor.setFontSize 16
-    Editor.renderer.setShowPrintMargin false
-    Editor.renderer.setShowGutter false
-    Editor.setHighlightActiveLine true
-    Editor.on 'change', (e) ->
-      Session.set 'comments.new.value', Editor.getValue()
+  $('#editor').jqte
+    sub: false,
+    sup: false,
+    strike: false,
+    remove: false,
+    source: false,
+    rule: false
 
-  if Meteor.user() then setTimeout setup, 300
-
-  $('.toggle-preview').tooltip title: 'Click to toggle markdown preview mode.'
-    
 Template.comments.helpers
   comments: ->
     _.sortBy @comments(), 'createdAt'
 
-  newComment: ->
-    Session.get 'comments.new.value'
-
-  previewing: ->
-    Session.get 'comments.new.previewing'
-
 Template.comments.events
-  'click .toggle-preview': (e) ->
-    preview = Session.get 'comments.new.previewing'
-    preview = !preview
-    Session.set 'comments.new.previewing', preview
-
   'click .add-comment': (e) ->
     username = "Unknown"
     user = Meteor.user()
@@ -57,11 +35,11 @@ Template.comments.events
     if user.profile and user.profile.name then username = user.profile.name
     if user.profile and user.profile.firstName then username = user.profile.firstName + " " + Meteor.user().profile.lastName
 
-    comment = 
+    comment =
       associationId: @id
       userId: Meteor.userId()
       username: username
-      comment: Session.get 'comments.new.value'
+      comment: $('#editor').val()
       path: Router.current().path
       notify: []
       tags: []
@@ -84,5 +62,4 @@ Template.comments.events
     Comment.create comment
 
     # Clear values
-    Session.set('comments.new.value', '')
-    Editor.setValue('')
+    $('#editor').jqteVal ''

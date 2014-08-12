@@ -5,7 +5,7 @@
       {{#each comments}}
         <li class="list-group-item">
           <p>
-            {{#markdown}}{{comment}}{{/markdown}}
+            {{{comment}}}
           </p>
           <p class="text-muted">
             - {{username}} ({{commentDate createdAt}})
@@ -17,32 +17,15 @@
     </ul>
     {{#if currentUser}}
       <div class="form-group editor-group">
-        
-        <div id="preview" class="{{#unless previewing}}hide{{/unless}}">
-          {{#markdown}}{{newComment}}{{/markdown}}
-        </div>
 
-        <div id="editor-wrapper" class="{{#if previewing}}hide{{/if}}">
+        <div id="editor-wrapper" class="block">
           <div id="editor"></div>
         </div>
 
-        <button class="toggle-preview">
-          {{#if previewing}}
-            <i class="fa fa-eye-slash icon-eye-close"></i>
-          {{else}}
-            <i class="fa fa-eye icon-eye-open"></i>
-          {{/if}}
-        </button>
-
-        <span class="text-muted pull-right hint">
-          <strong>Hint:</strong> you can use 
-          <a target="_blank" href="http://daringfireball.net/projects/markdown/syntax">markdown</a> to enhance your comments!
-        </span>
-
-        <button class="btn btn-primary add-comment">
+        <button class="btn add-comment">
           <i class="fa fa-comment icon-comment"></i> Comment
         </button>
-      
+
       </div>
     {{else}}
       <div class="alert alert-warning">

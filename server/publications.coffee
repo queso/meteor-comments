@@ -5,7 +5,10 @@ Meteor.publish 'comments', (associationId) ->
       createdAt: 1
 
 Meteor.publish 'unreadComments', ->
-  Comment.find({'notify': { $in: [@userId]}})
+  if @userId
+    Comment.find({'notify': { $in: [@userId]}})
+  else
+    @ready()
 
 Meteor.publish 'commentsUser', ->
   Meteor.users.find _id: @userId,
