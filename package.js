@@ -10,7 +10,6 @@ Package.on_use(function (api, where) {
     'less',
     'timeago',
     'ace-embed',
-    'marked'
   ], 'client');
 
   api.use([
@@ -20,7 +19,7 @@ Package.on_use(function (api, where) {
   ], ['client', 'server']);
 
 
-  
+
   api.add_files([
     'client/views/comments/_comments.html',
     'client/views/comments/_comments.coffee',
@@ -41,9 +40,9 @@ Package.on_use(function (api, where) {
     'collections/comments.coffee'
   ], ['client', 'server']);
 
-  
+
 
   api.export('Commentable', ['client', 'server'])
   api.export('Comment', ['client', 'server'])
-  
+
 });
