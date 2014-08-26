@@ -1,10 +1,5 @@
 class Commentable extends Minimongoid
 
-  # Go ahead and autosubscribe to the associated comments
-  constructor: (attr = {}, parent = null) ->
-    super(attr, parent)
-    if Meteor.subscribe then Meteor.subscribe 'comments', @id
-
   comments: ->
     Comment.where associationId: @id
 
